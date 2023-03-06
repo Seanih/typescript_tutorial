@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { AiOutlineCheck } from 'react-icons/ai';
 
 const Home: NextPage = () => {
-	const [task, setTask] = useState('');
+	const [task, setTask] = useState<string>('');
 	const [allTasks, setAllTasks] = useState<Task[]>([]);
 
 	interface Task {
@@ -27,14 +27,20 @@ const Home: NextPage = () => {
 		};
 
 		setAllTasks([...allTasks, taskObj]);
-		sessionStorage.setItem('taskArray', JSON.stringify(allTasks));
+		localStorage.setItem('taskArray', JSON.stringify(allTasks));
 		setTask('');
 	};
 
 	const handleDelete = (taskName: string) => {
-		sessionStorage.removeItem(taskName);
-		const updatedTasks = allTasks.filter(task => task.title !== taskName);
-		setAllTasks(updatedTasks);
+		let updatedTasks = allTasks.filter(item => taskName != item.title);
+
+		localStorage.setItem('taskArray', JSON.stringify(updatedTasks));
+
+		let tasks = localStorage.getItem('taskArray');
+
+		if (tasks) {
+			setAllTasks(JSON.parse(tasks));
+		}
 	};
 
 	const handleComplete = (taskName: string) => {
@@ -56,7 +62,7 @@ const Home: NextPage = () => {
 		}
 
 		console.log(allTasks);
-	}, [allTasks]);
+	}, []);
 
 	return (
 		<div className={styles.container}>
