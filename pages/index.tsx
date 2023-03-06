@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from '../styles/Home.module.css';
 import { v4 as uuidv4 } from 'uuid';
 import { AiOutlineCheck } from 'react-icons/ai';
@@ -55,15 +55,6 @@ const Home: NextPage = () => {
 		setAllTasks([...allTasks]);
 	};
 
-	useEffect(() => {
-		const storedData = localStorage.getItem('taskArray');
-		if (storedData) {
-			setAllTasks(JSON.parse(storedData));
-		}
-
-		console.log(allTasks);
-	}, []);
-
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -111,9 +102,12 @@ const Home: NextPage = () => {
 									x
 								</button>
 								<button
-									className='absolute border top-0 right-[-3rem] h-full w-8 flex justify-center items-center bg-green-400 hover:bg-green-600'
+									className={`absolute border top-0 right-[-3rem] h-full w-8 flex justify-center items-center bg-green-400 hover:bg-green-600 ${
+										item.completed && 'bg-green-800 hover:bg-green-900'
+									}`}
 									type='button'
 									onClick={() => handleComplete(item.title)}
+									disabled={item.completed && true}
 								>
 									<AiOutlineCheck />
 								</button>
